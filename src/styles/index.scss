@@ -19,7 +19,7 @@ label {
 
 html {
   height: 100%;
-  box-sizing: border-box;
+  background: #f5f5f5;
 }
 
 #app{
@@ -190,4 +190,9 @@ code {
 
 .multiselect--active {
   z-index: 1000 !important;
+}
+
+// 红色字体
+.text-red {
+  color: red
 }

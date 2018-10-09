@@ -4,7 +4,7 @@
     <el-form class="login-form" autoComplete="on" :model="loginForm" :rules="loginRules" ref="loginForm" label-position="left">
 
       <div class="title-container">
-        <h3 class="title">MES系统登录</h3>
+        <h3 class="title">徽州电子商务平台</h3>
       </div>
 
       <el-form-item prop="username">
@@ -26,7 +26,7 @@
         </span>
       </el-form-item>
 
-      <el-button type="primary" style="width:100%;margin-bottom:30px;" :loading="loading" @click.native.prevent="handleLogin">登录</el-button>
+      <el-button  style="color:#FFFFFF;background:#F56961;width:100%;margin-bottom:30px;" :loading="loading" @click.native.prevent="handleLogin">登录</el-button>
 
 
     </el-form>
@@ -35,69 +35,69 @@
 </template>
 
 <script>
-import { isvalidUsername } from "@/utils/validate";
+import { isvalidUsername } from '@/utils/validate'
 
 export default {
-  name: "login",
+  name: 'login',
   data() {
     const validateUsername = (rule, value, callback) => {
       if (!isvalidUsername(value)) {
-        callback(new Error("Please enter the correct user name"));
+        callback(new Error('Please enter the correct user name'))
       } else {
-        callback();
+        callback()
       }
-    };
+    }
     const validatePassword = (rule, value, callback) => {
       if (value.length < 6) {
-        callback(new Error("The password can not be less than 6 digits"));
+        callback(new Error('The password can not be less than 6 digits'))
       } else {
-        callback();
+        callback()
       }
-    };
+    }
     return {
       loginForm: {
-        username: "admin",
-        password: "12345678"
+        username: 'admin',
+        password: '123456'
       },
       loginRules: {
         username: [
-          { required: true, trigger: "blur", validator: validateUsername }
+          { required: true, trigger: 'blur', validator: validateUsername }
         ],
         password: [
-          { required: true, trigger: "blur", validator: validatePassword }
+          { required: true, trigger: 'blur', validator: validatePassword }
         ]
       },
-      passwordType: "password",
+      passwordType: 'password',
       loading: false,
       showDialog: false
-    };
+    }
   },
   methods: {
     showPwd() {
-      if (this.passwordType === "password") {
-        this.passwordType = "";
+      if (this.passwordType === 'password') {
+        this.passwordType = ''
       } else {
-        this.passwordType = "password";
+        this.passwordType = 'password'
       }
     },
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
-          this.loading = true;
+          this.loading = true
           this.$store
-            .dispatch("LoginByUsername", this.loginForm)
+            .dispatch('LoginByUsername', this.loginForm)
             .then(() => {
-              this.loading = false;
-              this.$router.push({ path: "/" });
+              this.loading = false
+              this.$router.push({ path: '/' })
             })
             .catch(() => {
-              this.loading = false;
-            });
+              this.loading = false
+            })
         } else {
-          console.log("error submit!!");
-          return false;
+          console.log('error submit!!')
+          return false
         }
-      });
+      })
     },
     afterQRScan() {
       // const hash = window.location.hash.slice(1)
@@ -124,7 +124,7 @@ export default {
   destroyed() {
     // window.removeEventListener('hashchange', this.afterQRScan)
   }
-};
+}
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
@@ -143,7 +143,7 @@ $light_gray: #eee;
       -webkit-appearance: none;
       border-radius: 0px;
       padding: 12px 5px 12px 15px;
-      color: $light_gray;
+      // color: $light_gray;
       height: 47px;
       &:-webkit-autofill {
         -webkit-box-shadow: 0 0 0px 1000px $bg inset !important;
@@ -169,9 +169,12 @@ $light_gray: #eee;
   position: fixed;
   height: 100%;
   width: 100%;
-  background-color: $bg;
+  // background-color: $bg;
+  background: url(../../assets/custom-theme/images/login-bg.png) no-repeat;
+  background-size: 100% 100%;
   .login-form {
     position: absolute;
+    background-color:#EAEAEA;
     left: 0;
     right: 0;
     width: 520px;
@@ -203,7 +206,8 @@ $light_gray: #eee;
     .title {
       font-size: 26px;
       font-weight: 400;
-      color: $light_gray;
+      // color: $light_gray;
+      color : #F56961;
       margin: 0px auto 40px auto;
       text-align: center;
       font-weight: bold;

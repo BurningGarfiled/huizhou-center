@@ -1,4 +1,4 @@
-import { login,getCurrentUser } from '@/api/common/login'
+import { login, getCurrentUser } from '@/api/common/login'
 
 import { getToken, setToken, removeToken } from '@/utils/auth'
 
@@ -51,8 +51,9 @@ const user = {
       return new Promise((resolve, reject) => {
         login(username, userInfo.password).then(response => {
           const data = response.data.data
-          commit('SET_TOKEN', data.Authorization)
-          setToken(data.Authorization)
+          // console.log(data)
+          commit('SET_TOKEN', data.token)
+          setToken(data.token)
           resolve()
         }).catch(error => {
           reject(error)
@@ -70,16 +71,19 @@ const user = {
           const data = response.data.data
 
           if (data.roles && data.roles.length > 0) { // 验证返回的roles是否是一个非空数组
-            commit('SET_ROLES', data.roles)
+            const roles = []
+            data.roles.forEach(role => {
+              roles.push(role.roleName)
+            })
+            commit('SET_ROLES', roles)
             // commit('SET_ROLES', data.roles)
-
           } else {
             reject('getInfo: roles must be a non-null array !')
           }
 
-          commit('SET_NAME', data.userName)
+          commit('SET_NAME', data.username)
           // commit('SET_AVATAR', data.avatar)
-          commit('SET_AVATAR', "https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1533031924&di=e5c7b0c687f79ec41ab412b1fc4c0317&src=http://img3.duitang.com/uploads/item/201501/25/20150125094246_xBn2x.jpeg")
+          commit('SET_AVATAR', 'https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1533031924&di=e5c7b0c687f79ec41ab412b1fc4c0317&src=http://img3.duitang.com/uploads/item/201501/25/20150125094246_xBn2x.jpeg')
           commit('SET_INTRODUCTION', data.introduction)
           resolve(response)
         }).catch(error => {
@@ -106,10 +110,10 @@ const user = {
     LogOut({ commit, state }) {
       return new Promise((resolve, reject) => {
         // logout(state.token).then(() => {
-          commit('SET_TOKEN', '')
-          commit('SET_ROLES', [])
-          removeToken()
-          resolve()
+        commit('SET_TOKEN', '')
+        commit('SET_ROLES', [])
+        removeToken()
+        resolve()
         // }).catch(error => {
         //   reject(error)
         // })
@@ -130,7 +134,7 @@ const user = {
       return new Promise(resolve => {
         commit('SET_TOKEN', role)
         setToken(role)
-        getUserInfo(role).then(response => {
+        this.GetUserInfo(role).then(response => {
           const data = response.data
           commit('SET_ROLES', data.roles)
           commit('SET_NAME', data.name)

@@ -1,7 +1,7 @@
 import axios from 'axios'
-import { Message } from 'element-ui'
+import { Message, MessageBox } from 'element-ui'
 import store from '@/store'
-import { getToken } from '@/utils/auth'
+// import { getToken } from '@/utils/auth'
 
 // create an axios instance
 const service = axios.create({
@@ -13,7 +13,7 @@ const service = axios.create({
 service.interceptors.request.use(config => {
   // Do something before request is sent
   // 标记来自web的请求
-  config.headers['From'] = 'web' 
+  config.headers['From'] = 'web'
   if (store.getters.token) {
     // 让每个请求携带token-- ['X-Token']为自定义key 请根据实际情况自行修改
     config.headers['Authorization'] = store.getters.token
@@ -27,7 +27,7 @@ service.interceptors.request.use(config => {
 
 // respone interceptor
 service.interceptors.response.use(
-  response => response,
+  // response => response,
   /**
    * 下面的注释为通过在response里，自定义code来标示请求状态
    * 当code返回如下情况则说明权限有问题，登出并返回到登录页
@@ -36,14 +36,15 @@ service.interceptors.response.use(
    */
   response => {
     const res = response.data
+
     if (res.code !== 200) {
       Message({
-        message: res.message,
+        message: res.msg,
         type: 'error',
         duration: 5 * 1000
       })
       // 400非法请求  401未授权
-      if (res.code === 400 || res.code === 401 ) {
+      if (res.code === 400 || res.code === 401) {
         // 请自行在引入 MessageBox
         // import { Message, MessageBox } from 'element-ui'
         MessageBox.confirm('你已被登出，可以取消继续留在该页面，或者重新登录', '确定登出', {
@@ -58,7 +59,7 @@ service.interceptors.response.use(
       }
       return Promise.reject('error')
     } else {
-      return response.data
+      return response
     }
   },
   error => {
